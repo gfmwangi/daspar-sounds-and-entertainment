@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="description" content="Manage DASPAR Sounds and Entertainment catalogue listings and product details.">
+    <title>Admin Sign-in | DASPAR</title>
+    <link rel="stylesheet" href="/src/styles.css">
+    <script type="module" src="/src/admin.js"></script>
+  </head>
+  <body class="admin-body">
+    <main class="admin-login-layout">
+      <section class="admin-login-brand" aria-label="DASPAR business administration">
+        <a class="brand brand--inverse brand--with-logo" href="%BASE_URL%" aria-label="DASPAR public website">
+          <img class="brand__image" src="%BASE_URL%assets/logo/logo-1.jpeg" alt="">
+          <span class="brand__text"><span class="brand__name">DASPAR</span><span class="brand__sub">SOUNDS &amp; ENTERTAINMENT</span></span>
+        </a>
+        <div class="admin-login-brand__message">
+          <p class="eyebrow eyebrow--light">BUSINESS ADMINISTRATION</p>
+          <h1>Product details, <span>kept in view.</span></h1>
+          <p>Manage catalogue listings, product details, and availability from one place.</p>
+        </div>
+        <div class="admin-deco-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </section>
+      <section class="admin-login-panel" aria-labelledby="admin-login-title">
+        <div class="admin-login-card">
+          <a class="admin-back-link" href="%BASE_URL%">← Back to website</a>
+          <p class="eyebrow">ADMIN SIGN-IN</p>
+          <h2 id="admin-login-title">Sign in to manage products</h2>
+          <p class="admin-muted">Enter your administrator account details.</p>
+          <form id="admin-login-form" autocomplete="off" novalidate>
+            <div class="form-field"><label for="admin-email">Email address</label><input id="admin-email" name="email" type="email" autocomplete="off" placeholder="name@example.com" aria-describedby="admin-login-message"></div>
+            <div class="form-field"><label for="admin-password">Password</label><input id="admin-password" name="password" type="password" autocomplete="off" placeholder="Enter password" aria-describedby="admin-login-message"></div>
+            <button class="button button--primary button--full" type="submit">Sign in <span aria-hidden="true">→</span></button>
+            <p class="form-status" id="admin-login-message" role="status" aria-live="polite"></p>
+          </form>
+          <div class="admin-demo-link"><span>ADMINISTRATION</span><a href="%BASE_URL%admin/dashboard.html">Open admin dashboard ↗</a></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "daspar-sounds-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:static": "node scripts/render-catalogue.mjs && vite --config vite.config.js --host 0.0.0.0 --port ${PORT:-3000} --strictPort",
+    "build:static": "node scripts/render-catalogue.mjs && vite --config vite.config.js build",
+    "build:pages": "node scripts/build-pages.mjs",
+    "preview:static": "vite --config vite.config.js preview --host 0.0.0.0 --port ${PORT:-3000} --strictPort"
+  },
+  "devDependencies": {
+    "vite": "^7.1.7"
+  },
+  "packageManager": "pnpm@10.18.0"
+}

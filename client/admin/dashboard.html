@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="description" content="DASPAR product administration workspace.">
+    <title>Product Dashboard | DASPAR</title>
+    <link rel="stylesheet" href="/src/styles.css">
+    <script type="module" src="/src/admin.js"></script>
+  </head>
+  <body class="admin-body admin-body--dashboard">
+    <a class="skip-link" href="#admin-main">Skip to dashboard</a>
+    <header class="admin-topbar">
+      <a class="brand brand--with-logo" href="%BASE_URL%" aria-label="DASPAR public website">
+        <img class="brand__image" src="%BASE_URL%assets/logo/logo-1.jpeg" alt="">
+        <span class="brand__text"><span class="brand__name">DASPAR</span><span class="brand__sub">SOUNDS &amp; ENTERTAINMENT</span></span>
+      </a>
+      <div class="admin-topbar__right">
+        <span class="admin-user"><span class="admin-user__avatar" aria-hidden="true">D</span><span>Administrator</span></span>
+        <a class="button button--small button--outline" href="%BASE_URL%admin/login.html">Log out</a>
+      </div>
+    </header>
+    <div class="admin-shell">
+      <aside class="admin-sidebar" aria-label="Admin dashboard navigation">
+        <p class="admin-sidebar__label">WORKSPACE</p>
+        <a class="admin-side-link is-active" href="#overview" data-admin-nav="overview"><span aria-hidden="true">▦</span> Overview</a>
+        <a class="admin-side-link" href="#products" data-admin-nav="products"><span aria-hidden="true">◫</span> Products</a>
+        <a class="admin-side-link" href="#add-product" data-admin-nav="add"><span aria-hidden="true">＋</span> Add product</a>
+        <div class="admin-sidebar__bottom">
+          <a class="admin-side-link" href="%BASE_URL%"><span aria-hidden="true">↗</span> View public site</a>
+        </div>
+      </aside>
+      <main class="admin-main" id="admin-main">
+        <section class="admin-view is-visible" id="overview-view" data-admin-view="overview" aria-labelledby="dashboard-title">
+          <div class="admin-page-heading">
+            <div>
+              <p class="eyebrow">DASHBOARD · OVERVIEW</p>
+              <h1 id="dashboard-title">Product overview</h1>
+              <p class="admin-muted">Review product listings, details, availability, and catalogue imagery.</p>
+            </div>
+            <button class="button button--primary" type="button" data-open-add>＋ Add product</button>
+          </div>
+          <div class="dashboard-stats">
+            <article class="dashboard-stat"><span>CATALOGUE PRODUCTS</span><strong data-stat-products>30</strong><small>Product listings</small></article>
+            <article class="dashboard-stat"><span>AVAILABLE LISTINGS</span><strong data-stat-stock>30</strong><small>Available products</small></article>
+            <article class="dashboard-stat"><span>PRODUCT PHOTOS</span><strong data-stat-photos>38</strong><small>Catalogue images</small></article>
+            <article class="dashboard-stat dashboard-stat--highlight"><span>DELIVERY COVERAGE</span><strong>Kenya-wide</strong><small>Countrywide delivery</small></article>
+          </div>
+          <div class="admin-panel" id="products-view">
+            <div class="admin-panel__heading">
+              <div><h2>Product catalogue</h2><p>Review and organize product names, details, availability, and images.</p></div>
+              <label class="admin-search"><span class="sr-only">Search products</span><span aria-hidden="true">⌕</span><input id="admin-search" type="search" placeholder="Search products"></label>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead><tr><th scope="col">ITEM / CATEGORY</th><th scope="col">DETAILS</th><th scope="col">AVAILABILITY</th><th scope="col">ACTIONS</th></tr></thead>
+                <tbody id="admin-products-body"></tbody>
+              </table>
+            </div>
+            <div class="admin-empty" id="admin-empty" hidden><p>No products match. Clear the search and try again.</p></div>
+          </div>
+        </section>
+        <section class="admin-view" id="add-view" data-admin-view="add" aria-labelledby="add-title" hidden>
+          <div class="admin-page-heading">
+            <div><p class="eyebrow">CATALOGUE · PRODUCT ENTRY</p><h1 id="add-title">Add a product</h1><p class="admin-muted">Enter the details customers need to find the right product.</p></div>
+            <button class="button button--outline" type="button" data-back-overview>← Back to overview</button>
+          </div>
+          <form class="admin-product-form" id="product-entry-form" novalidate>
+            <div class="admin-form-grid">
+              <div class="form-field"><label for="product-name">Product name <span aria-hidden="true">*</span></label><input id="product-name" name="productName" required></div>
+              <div class="form-field"><label for="product-category">Category <span aria-hidden="true">*</span></label><select id="product-category" name="category" required><option value="">Choose a category</option></select></div>
+              <div class="form-field admin-form-grid__wide"><label for="product-short">Short description</label><input id="product-short" name="shortDescription"></div>
+              <div class="form-field admin-form-grid__wide"><label for="product-description">Full description</label><textarea id="product-description" name="description" rows="4"></textarea></div>
+              <div class="form-field admin-form-grid__wide"><label for="product-specs">Specifications and features</label><textarea id="product-specs" name="specifications" rows="4" placeholder="Enter product specifications."></textarea></div>
+              <div class="form-field"><label for="product-availability">Availability</label><select id="product-availability" name="availability"><option value="pending">Status not listed</option><option value="in_stock">Available</option><option value="out_of_stock">Unavailable</option></select></div>
+              <div class="form-field"><label for="product-photo">Product photos</label><input id="product-photo" name="photos" type="file" accept="image/*" multiple aria-describedby="photo-help"><small id="photo-help">Select product photos to attach to this item.</small></div>
+            </div>
+            <div class="admin-form-actions"><button class="button button--outline" type="button" data-back-overview>Cancel</button><button class="button button--primary" type="submit">Save product</button></div>
+            <p class="form-status" id="admin-form-status" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </main>
+    </div>
+    <dialog class="confirm-dialog" id="delete-dialog" aria-labelledby="delete-title">
+      <div class="confirm-dialog__icon" aria-hidden="true">!</div>
+      <h2 id="delete-title">Remove this product?</h2>
+      <p>Are you sure you want to remove this item from the catalogue?</p>
+      <button class="button button--primary" type="button" data-close-delete>Cancel</button>
+    </dialog>
+  </body>
+</html>
