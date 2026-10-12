@@ -6,19 +6,19 @@
     <link rel="icon" type="image/png" sizes="256x256" href="%BASE_URL%assets/logo/favicon.png">
     <link rel="icon" type="image/x-icon" href="%BASE_URL%assets/logo/favicon.ico">
     <meta name="robots" content="noindex,nofollow">
-    <meta name="description" content="DASPAR product administration workspace.">
-    <title>Product Dashboard | DASPAR</title>
+    <meta name="description" content="Visual DASPAR product dashboard preview; this public page is not protected by secure authentication.">
+    <title>Product Dashboard Preview | DASPAR</title>
     <link rel="stylesheet" href="/src/styles.css">
     <script type="module" src="/src/admin.js"></script>
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Daspar Sounds and Entertainment">
-    <meta property="og:title" content="Product Dashboard | Daspar Sounds and Entertainment">
+    <meta property="og:title" content="Product Dashboard Preview | Daspar Sounds and Entertainment">
     <meta property="og:description" content="DASPAR Sounds &amp; Entertainment supplies quality, affordable electronics and public address (PA) systems, with countrywide delivery across Kenya. Services include PA systems, sound engineering, installation and maintenance, CCTV installation, speaker repairs, electrical and electronics maintenance, and electrical engineering.">
     <meta property="og:url" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/admin/dashboard.html">
     <meta property="og:image" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/assets/logo/logo-1.jpeg">
     <meta property="og:image:alt" content="DASPAR Sounds &amp; Entertainment logo">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Product Dashboard | Daspar Sounds and Entertainment">
+    <meta name="twitter:title" content="Product Dashboard Preview | Daspar Sounds and Entertainment">
     <meta name="twitter:description" content="DASPAR Sounds &amp; Entertainment supplies quality, affordable electronics and public address (PA) systems, with countrywide delivery across Kenya. Services include PA systems, sound engineering, installation and maintenance, CCTV installation, speaker repairs, electrical and electronics maintenance, and electrical engineering.">
     <meta name="twitter:image" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/assets/logo/logo-1.jpeg">
   </head>
@@ -30,8 +30,8 @@
         <span class="brand__text"><span class="brand__name">DASPAR</span><span class="brand__sub">SOUNDS &amp; ENTERTAINMENT</span></span>
       </a>
       <div class="admin-topbar__right">
-        <span class="admin-user"><span class="admin-user__avatar" aria-hidden="true">D</span><span>Administrator</span></span>
-        <a class="button button--small button--outline" href="%BASE_URL%admin/login.html">Log out</a>
+        <span class="admin-user"><span class="admin-user__avatar" aria-hidden="true">D</span><span>Preview administrator</span></span>
+        <a class="button button--small button--outline" href="%BASE_URL%admin/login.html">Sign-in preview</a>
       </div>
     </header>
     <div class="admin-shell">
@@ -45,6 +45,7 @@
         </div>
       </aside>
       <main class="admin-main" id="admin-main">
+        <aside class="admin-prototype-banner" role="note"><strong>Preview Mode — Not for Real Business Use.</strong> This dashboard is publicly accessible by URL and is not protected by secure authentication. Product changes may not be saved permanently. Do not enter real passwords or sensitive information.</aside>
         <section class="admin-view is-visible" id="overview-view" data-admin-view="overview" aria-labelledby="dashboard-title">
           <div class="admin-page-heading">
             <div>
@@ -54,10 +55,11 @@
             </div>
             <button class="button button--primary" type="button" data-open-add>＋ Add product</button>
           </div>
+          <p class="admin-sample-note"><strong>Sample data</strong> — Counts below reflect this demonstration catalogue, not a live business system.</p>
           <div class="dashboard-stats">
-            <article class="dashboard-stat"><span>CATALOGUE PRODUCTS</span><strong data-stat-products>30</strong><small>Product listings</small></article>
-            <article class="dashboard-stat"><span>AVAILABLE LISTINGS</span><strong data-stat-stock>30</strong><small>Available products</small></article>
-            <article class="dashboard-stat"><span>PRODUCT PHOTOS</span><strong data-stat-photos>38</strong><small>Catalogue images</small></article>
+            <article class="dashboard-stat"><span>CATALOGUE PRODUCTS</span><strong data-stat-products>30</strong><small>Sample product listings</small></article>
+            <article class="dashboard-stat"><span>AVAILABLE LISTINGS</span><strong data-stat-stock>30</strong><small>Sample available products</small></article>
+            <article class="dashboard-stat"><span>PRODUCT PHOTOS</span><strong data-stat-photos>38</strong><small>Sample catalogue images</small></article>
             <article class="dashboard-stat dashboard-stat--highlight"><span>DELIVERY COVERAGE</span><strong>Kenya-wide</strong><small>Countrywide delivery</small></article>
           </div>
           <div class="admin-panel" id="products-view">
@@ -97,9 +99,9 @@
     </div>
     <dialog class="confirm-dialog" id="delete-dialog" aria-labelledby="delete-title">
       <div class="confirm-dialog__icon" aria-hidden="true">!</div>
-      <h2 id="delete-title">Remove this product?</h2>
-      <p>Are you sure you want to remove this item from the catalogue?</p>
-      <button class="button button--primary" type="button" data-close-delete>Cancel</button>
+      <h2 id="delete-title">Deletion is unavailable in this preview</h2>
+      <p>No catalogue data has been changed.</p>
+      <button class="button button--primary" type="button" data-close-delete>Close</button>
     </dialog>
   </body>
 </html>

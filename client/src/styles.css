@@ -366,6 +366,8 @@ h3 { font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
 .admin-sidebar-note p { margin: 0; font-size: 8px; line-height: 1.6; }
 .admin-main { min-width: 0; padding: 25px clamp(19px, 4vw, 45px) 40px; }
 .admin-prototype-banner { margin-bottom: 25px; padding: 11px 14px; border: 1px solid #e8d391; border-radius: 8px; background: #fff9e6; color: #634a0e; font-size: 10px; }
+.admin-sample-note { margin: -7px 0 13px; color: var(--muted); font-size: 9px; line-height: 1.5; }
+.admin-sample-note strong { color: var(--blue-800); }
 .admin-page-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 20px; }
 .admin-page-heading .eyebrow { margin-bottom: 6px; font-size: 8px; }
 .admin-page-heading h1 { margin: 0 0 4px; font-size: clamp(27px, 3vw, 34px); }

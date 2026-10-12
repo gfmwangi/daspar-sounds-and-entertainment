@@ -5,6 +5,8 @@ loginForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const password = loginForm.elements.password;
   if (password) password.value = "";
+  const status = document.querySelector("#admin-login-message");
+  if (status) status.textContent = "Preview only: sign-in is not active; credentials are not sent or saved.";
 });
 
 const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (char) => ({
@@ -47,17 +49,22 @@ if (body) {
   search?.addEventListener("input", renderRows);
   body.addEventListener("click", (event) => {
     const edit = event.target.closest("[data-edit-product]");
-    if (!edit) return;
-    showView("add");
-    const item = PRODUCTS.find((product) => product.id === edit.dataset.editProduct);
-    if (!item) return;
-    document.querySelector("#product-name").value = item.name;
-    document.querySelector("#product-category").value = item.categoryId;
-    document.querySelector("#product-short").value = item.description;
-    document.querySelector("#product-description").value = item.description;
-    document.querySelector("#product-specs").value = item.specifications.map((spec) => `${spec.label}: ${spec.value}`).join("\n");
-    document.querySelector("#product-availability").value = item.availability;
-    document.querySelector("#admin-form-status").textContent = "";
+    if (edit) {
+      showView("add");
+      const item = PRODUCTS.find((product) => product.id === edit.dataset.editProduct);
+      if (!item) return;
+      document.querySelector("#product-name").value = item.name;
+      document.querySelector("#product-category").value = item.categoryId;
+      document.querySelector("#product-short").value = item.description;
+      document.querySelector("#product-description").value = item.description;
+      document.querySelector("#product-specs").value = item.specifications.map((spec) => `${spec.label}: ${spec.value}`).join("\n");
+      document.querySelector("#product-availability").value = item.availability;
+      document.querySelector("#admin-form-status").textContent = "";
+      return;
+    }
+    if (event.target.closest("[data-delete-product]")) {
+      document.querySelector("#delete-dialog")?.showModal();
+    }
   });
 }
 
@@ -99,7 +106,7 @@ document.querySelector("#product-entry-form")?.addEventListener("submit", (event
     form.elements.productName.focus();
     return;
   }
-  status.textContent = "";
+  status.textContent = "Preview only: product changes are not saved permanently.";
 });
 
 document.querySelector("[data-close-delete]")?.addEventListener("click", () => document.querySelector("#delete-dialog").close());

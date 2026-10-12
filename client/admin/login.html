@@ -6,19 +6,19 @@
     <link rel="icon" type="image/png" sizes="256x256" href="%BASE_URL%assets/logo/favicon.png">
     <link rel="icon" type="image/x-icon" href="%BASE_URL%assets/logo/favicon.ico">
     <meta name="robots" content="noindex,nofollow">
-    <meta name="description" content="Manage DASPAR Sounds and Entertainment catalogue listings and product details.">
-    <title>Admin Sign-in | DASPAR</title>
+    <meta name="description" content="Visual admin sign-in preview for DASPAR Sounds and Entertainment; secure authentication is not implemented.">
+    <title>Admin Sign-in Preview | DASPAR</title>
     <link rel="stylesheet" href="/src/styles.css">
     <script type="module" src="/src/admin.js"></script>
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Daspar Sounds and Entertainment">
-    <meta property="og:title" content="Admin Sign-in | Daspar Sounds and Entertainment">
+    <meta property="og:title" content="Admin Sign-in Preview | Daspar Sounds and Entertainment">
     <meta property="og:description" content="DASPAR Sounds &amp; Entertainment supplies quality, affordable electronics and public address (PA) systems, with countrywide delivery across Kenya. Services include PA systems, sound engineering, installation and maintenance, CCTV installation, speaker repairs, electrical and electronics maintenance, and electrical engineering.">
     <meta property="og:url" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/admin/login.html">
     <meta property="og:image" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/assets/logo/logo-1.jpeg">
     <meta property="og:image:alt" content="DASPAR Sounds &amp; Entertainment logo">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Admin Sign-in | Daspar Sounds and Entertainment">
+    <meta name="twitter:title" content="Admin Sign-in Preview | Daspar Sounds and Entertainment">
     <meta name="twitter:description" content="DASPAR Sounds &amp; Entertainment supplies quality, affordable electronics and public address (PA) systems, with countrywide delivery across Kenya. Services include PA systems, sound engineering, installation and maintenance, CCTV installation, speaker repairs, electrical and electronics maintenance, and electrical engineering.">
     <meta name="twitter:image" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/assets/logo/logo-1.jpeg">
   </head>
@@ -39,13 +39,14 @@
       <section class="admin-login-panel" aria-labelledby="admin-login-title">
         <div class="admin-login-card">
           <a class="admin-back-link" href="%BASE_URL%">← Back to website</a>
-          <p class="eyebrow">ADMIN SIGN-IN</p>
-          <h2 id="admin-login-title">Sign in to manage products</h2>
-          <p class="admin-muted">Enter your administrator account details.</p>
+          <p class="eyebrow">ADMIN ACCESS PREVIEW</p>
+          <h2 id="admin-login-title">Admin sign-in preview</h2>
+          <p class="admin-muted">This screen is for design review only. It does not sign users in or protect the dashboard.</p>
+          <aside class="prototype-warning" role="note" aria-label="Preview mode notice"><span class="prototype-warning__icon" aria-hidden="true">!</span><p><strong>Preview Mode — Not for Real Business Use.</strong> Secure authentication has not been implemented, and product changes may not be saved permanently. Do not enter real passwords or sensitive information.</p></aside>
           <form id="admin-login-form" autocomplete="off" novalidate>
             <div class="form-field"><label for="admin-email">Email address</label><input id="admin-email" name="email" type="email" autocomplete="off" placeholder="name@example.com" aria-describedby="admin-login-message"></div>
             <div class="form-field"><label for="admin-password">Password</label><input id="admin-password" name="password" type="password" autocomplete="off" placeholder="Enter password" aria-describedby="admin-login-message"></div>
-            <button class="button button--primary button--full" type="submit">Sign in <span aria-hidden="true">→</span></button>
+            <button class="button button--primary button--full" type="submit">Preview sign-in <span aria-hidden="true">→</span></button>
             <p class="form-status" id="admin-login-message" role="status" aria-live="polite"></p>
           </form>
           <div class="admin-demo-link"><span>ADMINISTRATION</span><a href="%BASE_URL%admin/dashboard.html">Open admin dashboard ↗</a></div>
