@@ -1,13 +1,29 @@
 {
-  "name": "daspar-sounds-frontend",
-  "version": "0.1.0",
+  "name": "daspar-sounds-and-entertainment",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "dev:static": "node scripts/render-catalogue.mjs && vite --config vite.config.js --host 0.0.0.0 --port ${PORT:-3000} --strictPort",
+    "start": "node server/server.js",
+    "dev:backend": "node --watch server/server.js",
+    "dev:frontend": "node scripts/render-catalogue.mjs && vite --config vite.config.js --host 127.0.0.1 --port 3000 --strictPort",
+    "dev:static": "node scripts/render-catalogue.mjs && vite --config vite.config.js --host 127.0.0.1 --port ${PORT:-3000} --strictPort",
+    "build": "node scripts/render-catalogue.mjs && vite --config vite.config.js build",
     "build:static": "node scripts/render-catalogue.mjs && vite --config vite.config.js build",
     "build:pages": "node scripts/build-pages.mjs",
-    "preview:static": "vite --config vite.config.js preview --host 0.0.0.0 --port ${PORT:-3000} --strictPort"
+    "preview:static": "vite --config vite.config.js preview --host 127.0.0.1 --port ${PORT:-3000} --strictPort",
+    "check:backend": "node --check server/server.js && node --check server/app.js && node --check server/config.js && node --check server/db/database.js && node --check server/routes/admin.js && node --check server/routes/public.js && node --check server/middleware/auth.js && node --check server/middleware/rateLimiter.js && node --check server/middleware/upload.js && node --check server/services/authService.js",
+    "test:review": "node scripts/review-backend-smoke.mjs"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^2.4.0"
   },
   "devDependencies": {
     "vite": "^7.1.7"

@@ -12,10 +12,17 @@ if (grid) {
   const whatsappNumber = "254745494350";
   let activeCategory = "all";
 
+  let currentProducts = [...PRODUCTS];
+  let currentCategories = [...PRODUCT_CATEGORIES];
+
   const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
   })[char]);
-  const photoUrl = (file) => `${import.meta.env.BASE_URL}assets/products/${encodeURIComponent(file)}`;
+  const photoUrl = (file = "") => {
+    if (!file) return `${import.meta.env.BASE_URL}assets/logo/logo-1.jpeg`;
+    if (file.startsWith("http://") || file.startsWith("https://") || file.startsWith("/")) return file;
+    return `${import.meta.env.BASE_URL}assets/products/${encodeURIComponent(file)}`;
+  };
   const stockLabel = (availability) => ({
     in_stock: "Available",
     out_of_stock: "Unavailable",
@@ -33,7 +40,7 @@ if (grid) {
   const productSummary = (product) => product.description || "Contact DASPAR for product details and current pricing.";
 
   function renderFilters() {
-    const items = [{ id: "all", label: "All categories" }, ...PRODUCT_CATEGORIES];
+    const items = [{ id: "all", label: "All categories" }, ...currentCategories];
     filterList.innerHTML = items.map((category) => `
       <button class="filter-chip${activeCategory === category.id ? " is-active" : ""}" type="button"
         data-category="${escapeHtml(category.id)}" aria-pressed="${activeCategory === category.id}">
@@ -42,7 +49,7 @@ if (grid) {
   }
 
   function productCard(product) {
-    const image = product.images[0];
+    const image = (product.images && product.images[0]) || "";
     return `
       <article class="product-card">
         <button class="product-card__media" type="button" data-open-product="${escapeHtml(product.id)}" aria-label="View details for ${escapeHtml(product.name)}">
@@ -60,9 +67,10 @@ if (grid) {
 
   function visibleProducts() {
     const query = searchInput.value.trim().toLocaleLowerCase();
-    return PRODUCTS.filter((product) => {
+    return currentProducts.filter((product) => {
       const categoryMatches = activeCategory === "all" || product.categoryId === activeCategory;
-      const searchable = `${product.name} ${product.categoryLabel} ${product.description} ${product.specifications.map((item) => `${item.label} ${item.value}`).join(" ")}`.toLocaleLowerCase();
+      const specsText = Array.isArray(product.specifications) ? product.specifications.map((item) => `${item.label} ${item.value}`).join(" ") : "";
+      const searchable = `${product.name} ${product.categoryLabel} ${product.description || ""} ${specsText}`.toLocaleLowerCase();
       return categoryMatches && (!query || searchable.includes(query));
     });
   }
@@ -77,12 +85,13 @@ if (grid) {
   }
 
   function openProduct(id) {
-    const product = getProductById(id);
+    const product = currentProducts.find((p) => p.id === id) || getProductById(id);
     if (!product) return;
-    const firstImage = product.images[0];
-    const gallery = product.images.length > 1 ? `
+    const images = Array.isArray(product.images) && product.images.length ? product.images : [""];
+    const firstImage = images[0];
+    const gallery = images.length > 1 ? `
       <div class="detail-gallery__thumbs" role="group" aria-label="More product photos">
-        ${product.images.map((file, index) => `
+        ${images.map((file, index) => `
           <button class="detail-gallery__thumb${index === 0 ? " is-selected" : ""}" type="button"
             data-gallery-photo="${escapeHtml(photoUrl(file))}" data-gallery-alt="${escapeHtml(product.name)} photo ${index + 1}"
             aria-label="Show photo ${index + 1}" aria-pressed="${index === 0}">
@@ -90,10 +99,11 @@ if (grid) {
           </button>`).join("")}
       </div>` : "";
     const description = product.description ? `<p>${escapeHtml(product.description)}</p>` : "";
-    const specifications = product.specifications.length ? `
+    const specs = Array.isArray(product.specifications) ? product.specifications : [];
+    const specifications = specs.length ? `
       <section class="detail-specifications" aria-labelledby="detail-specs-heading">
         <h3 id="detail-specs-heading">Specifications &amp; catalogue details</h3>
-        <dl class="detail-specs">${product.specifications.map((spec) => `<div><dt>${escapeHtml(spec.label)}</dt><dd>${escapeHtml(spec.value)}</dd></div>`).join("")}</dl>
+        <dl class="detail-specs">${specs.map((spec) => `<div><dt>${escapeHtml(spec.label)}</dt><dd>${escapeHtml(spec.value)}</dd></div>`).join("")}</dl>
       </section>` : "";
     dialogContent.innerHTML = `
       <div class="detail-layout">
@@ -142,4 +152,31 @@ if (grid) {
   const requestedCategory = new URLSearchParams(window.location.search).get("category");
   if (PRODUCT_CATEGORIES.some((category) => category.id === requestedCategory)) activeCategory = requestedCategory;
   render();
+
+  // Load live data from the backend when available
+  async function syncFromBackend() {
+    try {
+      const [prodRes, catRes] = await Promise.all([
+        fetch("/api/public/products"),
+        fetch("/api/public/categories"),
+      ]);
+      if (prodRes.ok) {
+        const data = await prodRes.json();
+        if (Array.isArray(data) && data.length > 0) {
+          currentProducts = data;
+        }
+      }
+      if (catRes.ok) {
+        const cats = await catRes.json();
+        if (Array.isArray(cats) && cats.length > 0) {
+          currentCategories = cats;
+        }
+      }
+      render();
+    } catch {
+      // Backend not running or static GitHub Pages mode; static PRODUCTS baseline remains active
+    }
+  }
+
+  syncFromBackend();
 }

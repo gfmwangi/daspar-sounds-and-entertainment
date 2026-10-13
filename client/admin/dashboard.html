@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" sizes="256x256" href="%BASE_URL%assets/logo/favicon.png">
     <link rel="icon" type="image/x-icon" href="%BASE_URL%assets/logo/favicon.ico">
     <meta name="robots" content="noindex,nofollow">
-    <meta name="description" content="Visual DASPAR product dashboard preview; this public page is not protected by secure authentication.">
+    <meta name="description" content="Local backend review dashboard for DASPAR. The static page is public; only API actions require a disposable local test session.">
     <title>Product Dashboard Preview | DASPAR</title>
     <link rel="stylesheet" href="/src/styles.css">
     <script type="module" src="/src/admin.js"></script>
@@ -30,8 +30,8 @@
         <span class="brand__text"><span class="brand__name">DASPAR</span><span class="brand__sub">SOUNDS &amp; ENTERTAINMENT</span></span>
       </a>
       <div class="admin-topbar__right">
-        <span class="admin-user"><span class="admin-user__avatar" aria-hidden="true">D</span><span>Preview administrator</span></span>
-        <a class="button button--small button--outline" href="%BASE_URL%admin/login.html">Sign-in preview</a>
+        <span class="admin-user"><span class="admin-user__avatar" id="admin-user-avatar" aria-hidden="true">D</span><span id="admin-user-name">Local review administrator</span></span>
+        <button class="button button--small button--outline" id="admin-logout-button" type="button">Sign out</button>
       </div>
     </header>
     <div class="admin-shell">
@@ -45,7 +45,7 @@
         </div>
       </aside>
       <main class="admin-main" id="admin-main">
-        <aside class="admin-prototype-banner" role="note"><strong>Preview Mode — Not for Real Business Use.</strong> This dashboard is publicly accessible by URL and is not protected by secure authentication. Product changes may not be saved permanently. Do not enter real passwords or sensitive information.</aside>
+        <aside class="admin-prototype-banner" id="admin-prototype-banner" role="note"><strong>Preview Mode — Not for Real Business Use.</strong> This dashboard page is a public static route; only API actions require disposable local test credentials. Product changes are stored in a local JSON file, not a production database. Do not enter real passwords, customer data, or other sensitive information.</aside>
         <section class="admin-view is-visible" id="overview-view" data-admin-view="overview" aria-labelledby="dashboard-title">
           <div class="admin-page-heading">
             <div>
@@ -99,9 +99,9 @@
     </div>
     <dialog class="confirm-dialog" id="delete-dialog" aria-labelledby="delete-title">
       <div class="confirm-dialog__icon" aria-hidden="true">!</div>
-      <h2 id="delete-title">Deletion is unavailable in this preview</h2>
-      <p>No catalogue data has been changed.</p>
-      <button class="button button--primary" type="button" data-close-delete>Close</button>
+      <h2 id="delete-title">Delete from the local review store?</h2>
+      <p id="delete-dialog-text">This removes local review data only; the live GitHub Pages site is unchanged.</p>
+      <div class="admin-form-actions"><button class="button button--outline" type="button" data-close-delete>Cancel</button><button class="button button--primary" type="button" id="confirm-delete-button">Delete from local store</button></div>
     </dialog>
   </body>
 </html>

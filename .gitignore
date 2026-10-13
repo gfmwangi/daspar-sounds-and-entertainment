@@ -3,7 +3,8 @@ dist/
 build/
 *.dist
 .cache/
-.env*
+.env
+.env.*
 !.env.example
 *.pem
 *.key
@@ -24,3 +25,6 @@ ehthumbs.db
 tmp/
 temp/
 *.bak
+*.tmp.*
+data/
+client/public/assets/products/review-upload-*

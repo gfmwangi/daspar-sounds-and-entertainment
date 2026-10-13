@@ -13,6 +13,10 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 3000,
     strictPort: true,
+    proxy: {
+      "/api": { target: "http://127.0.0.1:5000", changeOrigin: false },
+      "/uploads/products": { target: "http://127.0.0.1:5000", changeOrigin: false },
+    },
   },
   preview: {
     host: "0.0.0.0",

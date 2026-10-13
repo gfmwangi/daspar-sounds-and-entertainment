@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" sizes="256x256" href="%BASE_URL%assets/logo/favicon.png">
     <link rel="icon" type="image/x-icon" href="%BASE_URL%assets/logo/favicon.ico">
     <meta name="robots" content="noindex,nofollow">
-    <meta name="description" content="Visual admin sign-in preview for DASPAR Sounds and Entertainment; secure authentication is not implemented.">
+    <meta name="description" content="Local backend review sign-in for DASPAR Sounds and Entertainment. Test-only and not for production use.">
     <title>Admin Sign-in Preview | DASPAR</title>
     <link rel="stylesheet" href="/src/styles.css">
     <script type="module" src="/src/admin.js"></script>
@@ -41,8 +41,8 @@
           <a class="admin-back-link" href="%BASE_URL%">← Back to website</a>
           <p class="eyebrow">ADMIN ACCESS PREVIEW</p>
           <h2 id="admin-login-title">Admin sign-in preview</h2>
-          <p class="admin-muted">This screen is for design review only. It does not sign users in or protect the dashboard.</p>
-          <aside class="prototype-warning" role="note" aria-label="Preview mode notice"><span class="prototype-warning__icon" aria-hidden="true">!</span><p><strong>Preview Mode — Not for Real Business Use.</strong> Secure authentication has not been implemented, and product changes may not be saved permanently. Do not enter real passwords or sensitive information.</p></aside>
+          <p class="admin-muted">This sign-in is for local backend review only; it is not production-ready access control.</p>
+          <aside class="prototype-warning" role="note" aria-label="Preview mode notice"><span class="prototype-warning__icon" aria-hidden="true">!</span><p><strong>Preview Mode — Not for Real Business Use.</strong> A test-only local sign-in is available in this branch, but the dashboard page itself is static and this setup is not secure for production. Use only disposable test credentials. Do not enter real passwords, customer data, or other sensitive information.</p></aside>
           <form id="admin-login-form" autocomplete="off" novalidate>
             <div class="form-field"><label for="admin-email">Email address</label><input id="admin-email" name="email" type="email" autocomplete="off" placeholder="name@example.com" aria-describedby="admin-login-message"></div>
             <div class="form-field"><label for="admin-password">Password</label><input id="admin-password" name="password" type="password" autocomplete="off" placeholder="Enter password" aria-describedby="admin-login-message"></div>

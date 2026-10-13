@@ -51,14 +51,15 @@
           <p class="form-note" id="whatsapp-note">WhatsApp DASPAR at 0745 494 350.</p>
         </div>
         <div class="contact-form-card">
-          <div class="contact-form-card__head"><span class="form-kicker">EMAIL INQUIRY</span><h3>Prepare an inquiry</h3><p>Complete the form to open a prefilled email draft.</p></div>
+          <div class="contact-form-card__head"><span class="form-kicker">LOCAL REVIEW FORM</span><h3>Submit an inquiry</h3><p>This local backend review stores submissions in a local file; it does not email DASPAR.</p></div>
+          <p class="form-note" role="note">Review branch only: do not submit real customer or sensitive information. If the local backend is unavailable, the form can open an email draft for you to review and send.</p>
           <form id="contact-form" novalidate>
             <div class="form-field"><label for="full-name">Full name <span aria-hidden="true">*</span></label><input id="full-name" name="name" autocomplete="name" required aria-describedby="name-error"><small class="field-error" id="name-error"></small></div>
             <div class="form-field"><label for="email">Email address <span aria-hidden="true">*</span></label><input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error"><small class="field-error" id="email-error"></small></div>
             <div class="form-field"><label for="subject">Subject <span aria-hidden="true">*</span></label><input id="subject" name="subject" required aria-describedby="subject-error"><small class="field-error" id="subject-error"></small></div>
             <div class="form-field"><label for="message">Message <span aria-hidden="true">*</span></label><textarea id="message" name="message" rows="4" required aria-describedby="message-error"></textarea><small class="field-error" id="message-error"></small></div>
-            <button class="button button--primary button--full" type="submit">Prepare email inquiry <span aria-hidden="true">→</span></button>
-            <p class="form-note">Your email application will open with the inquiry details ready for you to review.</p>
+            <button class="button button--primary button--full" type="submit">Submit inquiry for local review <span aria-hidden="true">→</span></button>
+            <p class="form-note">If the backend is offline, your email application will open with a draft. You must review and send it yourself.</p>
             <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
           </form>
         </div>
