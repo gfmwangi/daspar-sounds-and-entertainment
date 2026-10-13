@@ -198,6 +198,7 @@ h3 { font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
 .contact-item__label { padding-top: 3px; color: var(--muted); font-size: 9px; font-weight: 700; letter-spacing: .15em; }
 .contact-item > a, .contact-item div a { display: block; color: var(--blue-900); font-size: 13px; font-weight: 600; }
 .contact-item a:hover { text-decoration: underline; }
+.contact-item__address { margin: 0; color: var(--blue-900); font-size: 12px; font-style: normal; font-weight: 600; line-height: 1.65; }
 .business-hours { max-width: 470px; margin: 23px 0; }
 .business-hours__title { display: block; margin-bottom: 9px; color: var(--blue-950); font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; font-size: 13px; font-weight: 700; }
 .business-hours dl { display: grid; gap: 5px; margin: 0; }
