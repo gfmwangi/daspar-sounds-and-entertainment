@@ -1,13 +1,26 @@
 {
-  "name": "daspar-sounds-frontend",
-  "version": "0.1.0",
+  "name": "daspar-sounds-and-entertainment",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "dev:backend": "node --watch server/server.js",
+    "dev:frontend": "node scripts/render-catalogue.mjs && vite --config vite.config.js --host 0.0.0.0 --port 3000",
     "dev:static": "node scripts/render-catalogue.mjs && vite --config vite.config.js --host 0.0.0.0 --port ${PORT:-3000} --strictPort",
+    "build": "node scripts/render-catalogue.mjs && vite --config vite.config.js build",
     "build:static": "node scripts/render-catalogue.mjs && vite --config vite.config.js build",
     "build:pages": "node scripts/build-pages.mjs",
-    "preview:static": "vite --config vite.config.js preview --host 0.0.0.0 --port ${PORT:-3000} --strictPort"
+    "preview:static": "vite --config vite.config.js preview --host 0.0.0.0 --port ${PORT:-3000} --strictPort",
+    "admin:reset": "node server/scripts/reset-admin.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "vite": "^7.1.7"

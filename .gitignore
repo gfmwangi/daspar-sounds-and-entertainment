@@ -24,3 +24,13 @@ ehthumbs.db
 tmp/
 temp/
 *.bak
+*.sqlite
+data/
+*HANDOFF*
+*handoff*
+*Handoff*
+*antigravity*
+*Antigravity*
+*.pdf
+
+

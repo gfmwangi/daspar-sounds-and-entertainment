@@ -30,8 +30,8 @@
         <span class="brand__text"><span class="brand__name">DASPAR</span><span class="brand__sub">SOUNDS &amp; ENTERTAINMENT</span></span>
       </a>
       <div class="admin-topbar__right">
-        <span class="admin-user"><span class="admin-user__avatar" aria-hidden="true">D</span><span>Preview administrator</span></span>
-        <a class="button button--small button--outline" href="%BASE_URL%admin/login.html">Sign-in preview</a>
+        <span class="admin-user"><span class="admin-user__avatar" id="admin-user-avatar" aria-hidden="true">A</span><span id="admin-user-name">Administrator</span></span>
+        <button class="button button--small button--outline" id="admin-logout-button" type="button">Sign out</button>
       </div>
     </header>
     <div class="admin-shell">
@@ -45,7 +45,7 @@
         </div>
       </aside>
       <main class="admin-main" id="admin-main">
-        <aside class="admin-prototype-banner" role="note"><strong>Preview Mode — Not for Real Business Use.</strong> This dashboard is publicly accessible by URL and is not protected by secure authentication. Product changes may not be saved permanently. Do not enter real passwords or sensitive information.</aside>
+        <aside class="admin-prototype-banner" id="admin-prototype-banner" role="note"><strong>Preview Mode — Not for Real Business Use.</strong> This dashboard is publicly accessible by URL and is not protected by secure authentication. Product changes may not be saved permanently. Do not enter real passwords or sensitive information.</aside>
         <section class="admin-view is-visible" id="overview-view" data-admin-view="overview" aria-labelledby="dashboard-title">
           <div class="admin-page-heading">
             <div>
@@ -82,6 +82,7 @@
             <button class="button button--outline" type="button" data-back-overview>← Back to overview</button>
           </div>
           <form class="admin-product-form" id="product-entry-form" novalidate>
+            <input type="hidden" id="editing-product-id" name="editingId" value="">
             <div class="admin-form-grid">
               <div class="form-field"><label for="product-name">Product name <span aria-hidden="true">*</span></label><input id="product-name" name="productName" required></div>
               <div class="form-field"><label for="product-category">Category <span aria-hidden="true">*</span></label><select id="product-category" name="category" required><option value="">Choose a category</option></select></div>
@@ -99,9 +100,12 @@
     </div>
     <dialog class="confirm-dialog" id="delete-dialog" aria-labelledby="delete-title">
       <div class="confirm-dialog__icon" aria-hidden="true">!</div>
-      <h2 id="delete-title">Deletion is unavailable in this preview</h2>
-      <p>No catalogue data has been changed.</p>
-      <button class="button button--primary" type="button" data-close-delete>Close</button>
+      <h2 id="delete-title">Confirm Deletion</h2>
+      <p id="delete-dialog-text">Are you sure you want to delete this product? This change will be permanently saved.</p>
+      <div class="confirm-dialog__actions" style="display:flex;gap:0.75rem;justify-content:center;margin-top:1.25rem;">
+        <button class="button button--outline" type="button" data-close-delete>Cancel</button>
+        <button class="button button--primary button--danger" type="button" id="confirm-delete-button" style="background:#dc2626;border-color:#dc2626;color:#ffffff;">Delete permanently</button>
+      </div>
     </dialog>
   </body>
 </html>

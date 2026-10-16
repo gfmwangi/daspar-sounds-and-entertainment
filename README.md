@@ -24,28 +24,66 @@ Business contact: `dasparent@outlook.com`; `+254 706 892 739` and `+254 745 494 
 
 Requirements: Node.js 22 or a compatible current release, and pnpm 10.
 
+1. Install project dependencies:
 ```bash
-pnpm install --frozen-lockfile
-pnpm dev:static
+pnpm install
 ```
 
-The development server uses port `3000` by default; `PORT` can change it.
+2. Start the backend server (runs on port 5000 by default):
+```bash
+pnpm run dev:backend
+```
+
+3. In a second terminal, start the frontend Vite development server (proxies `/api` requests to backend on port 5000):
+```bash
+pnpm run dev:frontend
+```
+
+Alternatively, to run the static frontend only without the backend:
+```bash
+pnpm run dev:static
+```
+
+## Backend and Database
+
+The backend is built with Node.js 22 and Express in `server/`.
+
+- **Persistent Database**: Automatically initialized and seeded on first run with the 30 confirmed catalogue products and 10 categories from `client/src/data/products.js`. Data persists in `data/daspar-store.json`.
+- **Authentication**: Session-based authentication with `httpOnly`, `SameSite=Lax` cookies, rate limiting, and password hashing (`scrypt`).
+- **Default Administrator**:
+  - Email: `admin@daspar.co.ke` (configurable via `ADMIN_EMAIL` in `.env`)
+  - Password: `DasparAdmin2026!` (configurable via `ADMIN_INITIAL_PASSWORD` in `.env`)
+- **API Endpoints**:
+  - `GET /api/public/products` — Filterable catalogue (`?category=`, `?q=`)
+  - `GET /api/public/products/:id` — Single product details
+  - `GET /api/public/categories` — Product categories
+  - `POST /api/contact-inquiries` — Customer inquiries (rate-limited)
+  - `POST /api/admin/session` — Administrator sign-in
+  - `GET /api/admin/session` — Current session check
+  - `DELETE /api/admin/session` — Sign out
+  - `GET /api/admin/stats` — Live dashboard metrics
+  - `GET /api/admin/products` — Authorized catalogue management
+  - `POST /api/admin/products` — Add product
+  - `PATCH /api/admin/products/:id` — Update product
+  - `DELETE /api/admin/products/:id` — Delete product
+  - `POST /api/admin/products/:id/images` — Upload product photographs
 
 ## Build and deployment
 
 ```bash
-pnpm build:static
+pnpm run build:static
 ```
 
-The static output is written to `dist/public/`. GitHub Actions builds and deploys the public site to GitHub Pages whenever changes are pushed to `main`. The project-site base path is `/daspar-sounds-and-entertainment/`; if the repository name changes, update the base path in `scripts/build-pages.mjs` and the matching Vite configuration.
-
-GitHub Pages deployment uses a custom workflow, as documented by [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages) and [Vite's static deployment guide](https://vite.dev/guide/static-deploy).
+- **Static Deployment (GitHub Pages)**: Builds to `dist/public/` using `pnpm run build:pages`. GitHub Actions deploys the static site to GitHub Pages whenever changes are pushed to `main`.
+- **Full-Stack Deployment (Render, Railway, Fly.io, or VPS)**: Build the static frontend (`pnpm run build`) and start the unified Node server (`pnpm start`). The Node server serves both the static pages and the `/api/*` endpoints from the same origin.
 
 ## Project structure
 
-- `client/` contains the public multi-page site, admin mockups, shared styles/scripts, product data, and supplied image assets.
-- `scripts/render-catalogue.mjs` generates catalogue cards into the initial HTML so the product list is present before JavaScript runs.
-- `.github/workflows/pages.yml` builds and publishes the static site.
-- `GITHUB_PAGES.md` records the publication paths and deployment references.
+- `client/` — Public multi-page website, admin screens, styles, client scripts, and product assets.
+- `server/` — Express backend, database engine, authentication service, rate limiters, file uploads, and API routes.
+- `data/` — Persistent store directory (git-ignored for security).
+- `scripts/render-catalogue.mjs` — Generates catalogue cards into the initial HTML so products are present before client JavaScript runs.
+- `scripts/build-pages.mjs` — Prepares static build with GitHub Pages subpath.
+- `.github/workflows/pages.yml` — Builds and deploys the static site to GitHub Pages.
+- `GITHUB_PAGES.md` — Publication records and URLs.
 
-No backend, database, authentication, server functions, persistent storage, or email API is included. Product data is maintained in `client/src/data/products.js` and can be connected to a future data source without changing the site's page structure.

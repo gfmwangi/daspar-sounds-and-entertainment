@@ -12,12 +12,24 @@ export default defineConfig({
   server: {
     host: "0.0.0.0",
     port: 3000,
-    strictPort: true,
+    strictPort: false,
+    proxy: {
+      "/api": {
+        target: process.env.BACKEND_URL || "http://localhost:5000",
+        changeOrigin: true,
+      },
+    },
   },
   preview: {
     host: "0.0.0.0",
     port: 3000,
     strictPort: true,
+    proxy: {
+      "/api": {
+        target: process.env.BACKEND_URL || "http://localhost:5000",
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: path.resolve(projectRoot, "dist/public"),
