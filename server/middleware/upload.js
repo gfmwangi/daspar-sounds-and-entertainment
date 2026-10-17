@@ -1,39 +1,35 @@
 import multer from "multer";
-import path from "node:path";
+import crypto from "node:crypto";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import { config } from "../config.js";
 
+const temporaryUploadDir = path.join(os.tmpdir(), "daspar-product-upload-tmp");
+fs.mkdirSync(temporaryUploadDir, { recursive: true, mode: 0o700 });
+
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    if (!fs.existsSync(config.productAssetsDir)) {
-      fs.mkdirSync(config.productAssetsDir, { recursive: true });
-    }
-    cb(null, config.productAssetsDir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    const cleanBase = path
-      .basename(file.originalname, ext)
-      .replace(/[^a-zA-Z0-9_\-\s]/g, "")
-      .trim();
-    const safeName = `${cleanBase || "product-image"}_${Date.now()}${ext || ".jpeg"}`;
-    cb(null, safeName);
-  },
+  destination: (_req, _file, callback) => callback(null, temporaryUploadDir),
+  filename: (_req, _file, callback) => callback(null, `${crypto.randomUUID()}.upload`),
 });
 
-const fileFilter = (req, file, cb) => {
-  const allowedExtensions = /^\.(jpe?g|png|webp|avif)$/i;
-  const ext = path.extname(file.originalname).toLowerCase();
-
-  if (allowedExtensions.test(ext) && file.mimetype.startsWith("image/")) {
-    cb(null, true);
-  } else {
-    cb(new Error("Only image files (.jpeg, .jpg, .png, .webp, .avif) are allowed."));
-  }
+const fileFilter = (_req, file, callback) => {
+  const extension = path.extname(file.originalname).toLowerCase();
+  const validExtension = /^\.(jpe?g|png|webp|avif)$/.test(extension);
+  const validMime = new Set(["image/jpeg", "image/png", "image/webp", "image/avif"]).has(file.mimetype);
+  if (!validExtension || !validMime) return callback(new Error("Unsupported image type."));
+  callback(null, true);
 };
 
 export const uploadProductImages = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per file
+  limits: {
+    fileSize: config.uploadMaxBytes,
+    files: config.uploadMaxFiles,
+    fields: 10,
+    parts: config.uploadMaxFiles + 10,
+  },
   fileFilter,
 });
+
+export { temporaryUploadDir };

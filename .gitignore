@@ -26,11 +26,13 @@ temp/
 *.bak
 *.sqlite
 data/
+/backups/
+*.pgdump
+*.pgdump.enc
 *HANDOFF*
 *handoff*
 *Handoff*
 *antigravity*
 *Antigravity*
 *.pdf
-
 

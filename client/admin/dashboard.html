@@ -6,23 +6,24 @@
     <link rel="icon" type="image/png" sizes="256x256" href="%BASE_URL%assets/logo/favicon.png">
     <link rel="icon" type="image/x-icon" href="%BASE_URL%assets/logo/favicon.ico">
     <meta name="robots" content="noindex,nofollow">
-    <meta name="description" content="Visual DASPAR product dashboard preview; this public page is not protected by secure authentication.">
-    <title>Product Dashboard Preview | DASPAR</title>
+    <meta name="description" content="Secure product management workspace for DASPAR Sounds and Entertainment administrators.">
+    <title>Product Dashboard | DASPAR Sounds &amp; Entertainment</title>
     <link rel="stylesheet" href="/src/styles.css">
     <script type="module" src="/src/admin.js"></script>
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Daspar Sounds and Entertainment">
-    <meta property="og:title" content="Product Dashboard Preview | Daspar Sounds and Entertainment">
+    <meta property="og:title" content="Product Dashboard | Daspar Sounds and Entertainment">
     <meta property="og:description" content="DASPAR Sounds &amp; Entertainment supplies quality, affordable electronics and public address (PA) systems, with countrywide delivery across Kenya. Services include PA systems, sound engineering, installation and maintenance, CCTV installation, speaker repairs, electrical and electronics maintenance, and electrical engineering.">
     <meta property="og:url" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/admin/dashboard.html">
     <meta property="og:image" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/assets/logo/logo-1.jpeg">
     <meta property="og:image:alt" content="DASPAR Sounds &amp; Entertainment logo">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Product Dashboard Preview | Daspar Sounds and Entertainment">
+    <meta name="twitter:title" content="Product Dashboard | Daspar Sounds and Entertainment">
     <meta name="twitter:description" content="DASPAR Sounds &amp; Entertainment supplies quality, affordable electronics and public address (PA) systems, with countrywide delivery across Kenya. Services include PA systems, sound engineering, installation and maintenance, CCTV installation, speaker repairs, electrical and electronics maintenance, and electrical engineering.">
     <meta name="twitter:image" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/assets/logo/logo-1.jpeg">
   </head>
   <body class="admin-body admin-body--dashboard">
+    <div class="admin-auth-status" id="admin-auth-status" role="status" aria-live="polite">Verifying administrator access…</div>
     <a class="skip-link" href="#admin-main">Skip to dashboard</a>
     <header class="admin-topbar">
       <a class="brand brand--with-logo" href="%BASE_URL%" aria-label="DASPAR public website">
@@ -39,13 +40,14 @@
         <p class="admin-sidebar__label">WORKSPACE</p>
         <a class="admin-side-link is-active" href="#overview" data-admin-nav="overview"><span aria-hidden="true">▦</span> Overview</a>
         <a class="admin-side-link" href="#products" data-admin-nav="products"><span aria-hidden="true">◫</span> Products</a>
+        <a class="admin-side-link" href="#inquiries" data-admin-nav="inquiries"><span aria-hidden="true">✉</span> Inquiries</a>
+        <a class="admin-side-link" href="#account" data-admin-nav="account"><span aria-hidden="true">⚙</span> Account settings</a>
         <a class="admin-side-link" href="#add-product" data-admin-nav="add"><span aria-hidden="true">＋</span> Add product</a>
         <div class="admin-sidebar__bottom">
           <a class="admin-side-link" href="%BASE_URL%"><span aria-hidden="true">↗</span> View public site</a>
         </div>
       </aside>
       <main class="admin-main" id="admin-main">
-        <aside class="admin-prototype-banner" id="admin-prototype-banner" role="note"><strong>Preview Mode — Not for Real Business Use.</strong> This dashboard is publicly accessible by URL and is not protected by secure authentication. Product changes may not be saved permanently. Do not enter real passwords or sensitive information.</aside>
         <section class="admin-view is-visible" id="overview-view" data-admin-view="overview" aria-labelledby="dashboard-title">
           <div class="admin-page-heading">
             <div>
@@ -55,11 +57,10 @@
             </div>
             <button class="button button--primary" type="button" data-open-add>＋ Add product</button>
           </div>
-          <p class="admin-sample-note"><strong>Sample data</strong> — Counts below reflect this demonstration catalogue, not a live business system.</p>
           <div class="dashboard-stats">
-            <article class="dashboard-stat"><span>CATALOGUE PRODUCTS</span><strong data-stat-products>30</strong><small>Sample product listings</small></article>
-            <article class="dashboard-stat"><span>AVAILABLE LISTINGS</span><strong data-stat-stock>30</strong><small>Sample available products</small></article>
-            <article class="dashboard-stat"><span>PRODUCT PHOTOS</span><strong data-stat-photos>38</strong><small>Sample catalogue images</small></article>
+            <article class="dashboard-stat"><span>CATALOGUE PRODUCTS</span><strong data-stat-products>—</strong><small>Live database count</small></article>
+            <article class="dashboard-stat"><span>AVAILABLE LISTINGS</span><strong data-stat-stock>—</strong><small>Live database count</small></article>
+            <article class="dashboard-stat"><span>PRODUCT PHOTOS</span><strong data-stat-photos>—</strong><small>Live database count</small></article>
             <article class="dashboard-stat dashboard-stat--highlight"><span>DELIVERY COVERAGE</span><strong>Kenya-wide</strong><small>Countrywide delivery</small></article>
           </div>
           <div class="admin-panel" id="products-view">
@@ -74,6 +75,56 @@
               </table>
             </div>
             <div class="admin-empty" id="admin-empty" hidden><p>No products match. Clear the search and try again.</p></div>
+          </div>
+        </section>
+        <section class="admin-view" id="inquiries-view" data-admin-view="inquiries" aria-labelledby="inquiries-title" hidden>
+          <div class="admin-page-heading">
+            <div><p class="eyebrow">CUSTOMER MESSAGES</p><h1 id="inquiries-title">Inquiries</h1><p class="admin-muted">Recent messages submitted through the website. Messages are saved only after the database confirms receipt.</p></div>
+            <button class="button button--outline" type="button" data-refresh-inquiries>Refresh inquiries</button>
+          </div>
+          <div class="admin-panel">
+            <div class="admin-panel__heading"><div><h2>Recent inquiries</h2><p>Latest 100 messages, newest first.</p></div></div>
+            <div class="admin-table-wrap"><table class="admin-table admin-inquiries-table"><thead><tr><th scope="col">RECEIVED</th><th scope="col">SENDER</th><th scope="col">SUBJECT / MESSAGE</th><th scope="col">REPLY</th></tr></thead><tbody id="admin-inquiries-body"></tbody></table></div>
+            <div class="admin-empty" id="admin-inquiries-empty" hidden><p>No customer inquiries have been received yet.</p></div>
+          </div>
+        </section>
+        <section class="admin-view" id="account-view" data-admin-view="account" aria-labelledby="account-title" hidden>
+          <div class="admin-page-heading"><div><p class="eyebrow">OWNER SECURITY</p><h1 id="account-title">Account settings</h1><p class="admin-muted">Changing your email or password signs out active sessions. Sign in again using the updated details.</p></div></div>
+          <div class="admin-settings-stack">
+            <form class="admin-product-form" id="admin-email-form" novalidate>
+              <div class="admin-panel__heading"><div><h2>Change administrator email</h2><p>The current password is required to confirm this change.</p></div></div>
+              <div class="admin-form-grid">
+                <div class="form-field"><label for="admin-current-email">Current email</label><input id="admin-current-email" type="email" readonly aria-readonly="true"></div>
+                <div class="form-field"><label for="admin-new-email">New email address</label><input id="admin-new-email" name="email" type="email" autocomplete="email" required></div>
+                <div class="form-field admin-form-grid__wide"><label for="admin-email-current-password">Current password</label><input id="admin-email-current-password" name="currentPassword" type="password" autocomplete="current-password" required></div>
+              </div>
+              <div class="admin-form-actions"><button class="button button--primary" type="submit">Update email</button></div>
+              <p class="form-status" id="admin-email-status" role="status" aria-live="polite"></p>
+            </form>
+            <form class="admin-product-form" id="admin-password-form" novalidate>
+              <div class="admin-panel__heading"><div><h2>Change administrator password</h2><p>Use a new password between 12 and 128 characters.</p></div></div>
+              <div class="admin-form-grid">
+                <div class="form-field admin-form-grid__wide"><label for="admin-password-current">Current password</label><input id="admin-password-current" name="currentPassword" type="password" autocomplete="current-password" required></div>
+                <div class="form-field"><label for="admin-new-password">New password</label><input id="admin-new-password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required></div>
+                <div class="form-field"><label for="admin-confirm-password">Confirm new password</label><input id="admin-confirm-password" name="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required></div>
+              </div>
+              <div class="admin-form-actions"><button class="button button--primary" type="submit">Update password</button></div>
+              <p class="form-status" id="admin-password-status" role="status" aria-live="polite"></p>
+            </form>
+            <section class="admin-product-form recovery-key-card" aria-labelledby="account-recovery-key-title">
+              <div class="admin-panel__heading"><div><h2 id="account-recovery-key-title">Emergency recovery key</h2><p>Keep this private and store it somewhere separate from this device. Anyone with the key and your email can reset the administrator password.</p></div></div>
+              <code class="recovery-key-value" id="admin-recovery-key-value">Verify your current password below to view the recovery key.</code>
+              <div class="admin-form-actions"><button class="button button--outline" type="button" data-copy-dashboard-key disabled>Copy recovery key</button><button class="button button--outline" type="button" data-hide-dashboard-key disabled>Hide recovery key</button></div>
+              <p class="form-status" id="admin-recovery-key-status" role="status" aria-live="polite"></p>
+              <form id="admin-recovery-key-view-form" class="admin-form-grid" novalidate>
+                <div class="form-field"><label for="admin-recovery-key-view-password">Current password to view key</label><input id="admin-recovery-key-view-password" name="currentPassword" type="password" autocomplete="current-password" required></div>
+                <div class="admin-form-actions"><button class="button button--primary" type="submit">Verify and reveal key</button></div>
+              </form>
+              <form id="admin-recovery-key-rotate-form" class="admin-form-grid" novalidate>
+                <div class="form-field"><label for="admin-recovery-key-current-password">Current password to rotate key</label><input id="admin-recovery-key-current-password" name="currentPassword" type="password" autocomplete="current-password" required></div>
+                <div class="admin-form-actions"><button class="button button--outline" type="submit">Rotate recovery key</button></div>
+              </form>
+            </section>
           </div>
         </section>
         <section class="admin-view" id="add-view" data-admin-view="add" aria-labelledby="add-title" hidden>

@@ -1,57 +1,51 @@
-/**
- * Lightweight, zero-dependency in-memory rate limiter middleware factory.
- * @param {number} windowMs - Time window in milliseconds
- * @param {number} maxAttempts - Max allowed requests within the window
- * @param {string} message - Error message on limit exceeded
- */
-export function rateLimiter({ windowMs, maxAttempts, message }) {
-  const store = new Map();
+import { db } from "../db/database.js";
+import { config } from "../config.js";
 
-  return (req, res, next) => {
-    const ip = req.ip || req.connection.remoteAddress || "unknown";
-    const now = Date.now();
-
-    const record = store.get(ip) || { count: 0, resetTime: now + windowMs };
-
-    if (now > record.resetTime) {
-      record.count = 1;
-      record.resetTime = now + windowMs;
-    } else {
-      record.count += 1;
-    }
-
-    store.set(ip, record);
-
-    // Periodically prune stale entries
-    if (store.size > 1000) {
-      for (const [key, val] of store.entries()) {
-        if (now > val.resetTime) store.delete(key);
+function databaseRateLimiter({ buckets, message }) {
+  return async (req, res, next) => {
+    try {
+      for (const bucket of buckets) {
+        const key = bucket.key(req);
+        const decision = await db.consumeRateLimit(key, bucket.maxHits, bucket.windowSeconds);
+        if (!decision.allowed) {
+          res.setHeader("Retry-After", String(decision.retryAfter));
+          return res.status(429).json({
+            error: "Too many requests",
+            message,
+            retryAfter: decision.retryAfter,
+          });
+        }
       }
+      next();
+    } catch {
+      res.status(503).json({ error: "Request protection is temporarily unavailable. Please try again shortly." });
     }
-
-    if (record.count > maxAttempts) {
-      const retryAfterSec = Math.ceil((record.resetTime - now) / 1000);
-      res.setHeader("Retry-After", String(retryAfterSec));
-      return res.status(429).json({
-        error: "Too many requests",
-        message: message || "Too many requests. Please try again later.",
-        retryAfter: retryAfterSec,
-      });
-    }
-
-    next();
   };
 }
 
-// Pre-configured limiters
-export const loginLimiter = rateLimiter({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  maxAttempts: 5,
-  message: "Too many sign-in attempts from this location. Please try again in 15 minutes.",
+const loginWindowSeconds = config.loginWindowSeconds;
+export const loginLimiter = databaseRateLimiter({
+  buckets: [
+    { key: (req) => `login-ip:${req.ip || "unknown"}`, maxHits: config.loginMaxAttempts * 2, windowSeconds: loginWindowSeconds },
+    { key: (req) => `login-email:${String(req.body?.email || "").trim().toLowerCase() || "missing"}`, maxHits: config.loginMaxAttempts, windowSeconds: loginWindowSeconds },
+  ],
+  message: "Too many sign-in attempts. Wait before trying again.",
 });
 
-export const contactLimiter = rateLimiter({
-  windowMs: 10 * 60 * 1000, // 10 minutes
-  maxAttempts: 5,
-  message: "Too many contact submissions sent. Please try again shortly.",
+export const setupLimiter = databaseRateLimiter({
+  buckets: [{ key: (req) => `setup-ip:${req.ip || "unknown"}`, maxHits: 3, windowSeconds: 3600 }],
+  message: "Administrator setup attempts are temporarily limited. Please wait before trying again.",
+});
+
+export const contactLimiter = databaseRateLimiter({
+  buckets: [{ key: (req) => `contact:${req.ip || "unknown"}`, maxHits: config.contactMaxAttempts, windowSeconds: config.contactWindowSeconds }],
+  message: "Too many contact submissions. Please try again later.",
+});
+
+export const recoveryLimiter = databaseRateLimiter({
+  buckets: [
+    { key: (req) => `recovery-ip:${req.ip || "unknown"}`, maxHits: 5, windowSeconds: 900 },
+    { key: (req) => `recovery-email:${String(req.body?.email || "").trim().toLowerCase() || "missing"}`, maxHits: 3, windowSeconds: 900 },
+  ],
+  message: "Too many recovery requests. Please wait before trying again.",
 });

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="256x256" href="%BASE_URL%assets/logo/favicon.png">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="description" content="One-time administrator setup for DASPAR Sounds and Entertainment.">
+    <title>One-Time Admin Setup | DASPAR</title>
+    <link rel="stylesheet" href="/src/styles.css">
+    <script type="module" src="/src/admin.js"></script>
+  </head>
+  <body class="admin-body">
+    <main class="admin-login-layout">
+      <section class="admin-login-brand" aria-label="DASPAR business administration">
+        <a class="brand brand--inverse brand--with-logo" href="%BASE_URL%" aria-label="DASPAR public website"><img class="brand__image" src="%BASE_URL%assets/logo/logo-1.jpeg" alt=""><span class="brand__text"><span class="brand__name">DASPAR</span><span class="brand__sub">SOUNDS &amp; ENTERTAINMENT</span></span></a>
+        <div class="admin-login-brand__message"><p class="eyebrow eyebrow--light">FIRST-TIME OWNER SETUP</p><h1>Set up your <span>private workspace.</span></h1><p>This one-time setup creates the first administrator. Once complete, public setup is permanently locked.</p></div>
+        <div class="admin-deco-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </section>
+      <section class="admin-login-panel" aria-labelledby="setup-title">
+        <div class="admin-login-card">
+          <a class="admin-back-link" href="%BASE_URL%admin/login.html">← Back to sign-in</a>
+          <p class="eyebrow">OWNER ACCOUNT</p>
+          <h2 id="setup-title">Create the first admin</h2>
+          <p class="admin-muted">Use an email you control and a strong, unique password. There is no public registration after this one-time setup.</p>
+          <p class="admin-runtime-note" id="admin-setup-runtime-note" role="status" aria-live="polite">Checking one-time setup availability…</p>
+          <form id="admin-setup-form" novalidate>
+            <div class="form-field"><label for="setup-email">Administrator email</label><input id="setup-email" name="email" type="email" autocomplete="email" maxlength="254" required disabled></div>
+            <div class="form-field"><label for="setup-password">Password</label><input id="setup-password" name="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required disabled aria-describedby="setup-password-help"><small id="setup-password-help">Use 12–128 characters. Prefer a unique passphrase you do not use elsewhere.</small></div>
+            <div class="form-field"><label for="setup-confirm-password">Confirm password</label><input id="setup-confirm-password" name="confirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required disabled></div>
+            <button class="button button--primary button--full" type="submit" disabled>Complete setup <span aria-hidden="true">→</span></button>
+            <p class="form-status" id="admin-setup-message" role="status" aria-live="polite"></p>
+          </form>
+          <section class="recovery-key-card" id="setup-recovery-key-card" hidden aria-labelledby="setup-recovery-key-title">
+            <h3 id="setup-recovery-key-title">Save your emergency recovery key</h3>
+            <p>This key can reset your password. Keep it private and store it somewhere separate from this device. It is also available after sign-in in Account Settings.</p>
+            <code id="setup-recovery-key" class="recovery-key-value"></code>
+            <button class="button button--outline" type="button" data-copy-setup-key>Copy recovery key</button>
+            <a class="button button--primary button--full" href="%BASE_URL%admin/dashboard.html">Continue to dashboard</a>
+            <p class="form-status" id="setup-key-copy-status" role="status" aria-live="polite"></p>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

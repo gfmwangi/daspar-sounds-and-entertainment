@@ -7,6 +7,7 @@ if (form) {
     { input: form.elements.subject, error: document.querySelector("#subject-error"), label: "Subject" },
     { input: form.elements.message, error: document.querySelector("#message-error"), label: "Message" },
   ];
+  const submitButton = form.querySelector('button[type="submit"]');
 
   function validate(field) {
     const value = field.input.value.trim();
@@ -16,6 +17,14 @@ if (form) {
     field.error.textContent = message;
     field.input.setAttribute("aria-invalid", String(Boolean(message)));
     return !message;
+  }
+
+  function openEmailDraft({ name, email, subject, message }) {
+    const body = [`Name: ${name}`, `Email: ${email}`, "", message].join("\n");
+    const draftUrl = `mailto:dasparent@outlook.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    status.textContent = "No inquiry was saved to the website. Opening an email draft for you to review and send.";
+    status.style.color = "inherit";
+    window.location.href = draftUrl;
   }
 
   fields.forEach(({ input, error }) => {
@@ -38,42 +47,49 @@ if (form) {
     }
 
     const formData = new FormData(form);
-    const name = String(formData.get("name") || "").trim();
-    const email = String(formData.get("email") || "").trim();
-    const subject = String(formData.get("subject") || "").trim();
-    const message = String(formData.get("message") || "").trim();
+    const inquiry = {
+      name: String(formData.get("name") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      subject: String(formData.get("subject") || "").trim(),
+      message: String(formData.get("message") || "").trim(),
+    };
 
-    status.textContent = "Sending inquiry...";
+    status.textContent = "Submitting your inquiry...";
     status.style.color = "var(--color-primary, #0369a1)";
+    if (submitButton) submitButton.disabled = true;
 
+    let response;
     try {
-      const response = await fetch("/api/contact-inquiries", {
+      response = await fetch("/api/contact-inquiries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message }),
+        body: JSON.stringify(inquiry),
+        cache: "no-store",
       });
-
-      if (response.ok) {
-        status.textContent = "Thank you! Your inquiry has been sent to DASPAR Sounds & Entertainment. We will get back to you shortly.";
-        status.style.color = "#15803d";
-        form.reset();
-        return;
-      }
     } catch {
-      // Backend not running or static host; proceed to mailto fallback
+      openEmailDraft(inquiry);
+      if (submitButton) submitButton.disabled = false;
+      return;
     }
 
-    // Fallback: open mail application
-    const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      "",
-      message,
-    ].join("\n");
-    const draftUrl = `mailto:dasparent@outlook.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    status.textContent = "Opening an email draft in your mail application. Review and send it there.";
-    status.style.color = "inherit";
-    window.location.href = draftUrl;
+    const isJson = /application\/json/i.test(response.headers.get("content-type") || "");
+    if (!isJson) {
+      openEmailDraft(inquiry);
+      if (submitButton) submitButton.disabled = false;
+      return;
+    }
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      status.textContent = result.error || "The server did not confirm that your inquiry was saved. No email draft was opened.";
+      status.style.color = "#dc2626";
+      if (submitButton) submitButton.disabled = false;
+      return;
+    }
+
+    status.textContent = result.message || "Your inquiry was saved. The website did not provide an email-delivery result.";
+    status.style.color = "#15803d";
+    form.reset();
+    if (submitButton) submitButton.disabled = false;
   });
 }
-

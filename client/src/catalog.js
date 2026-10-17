@@ -157,21 +157,14 @@ if (grid) {
   async function syncFromBackend() {
     try {
       const [prodRes, catRes] = await Promise.all([
-        fetch("/api/public/products"),
-        fetch("/api/public/categories"),
+        fetch("/api/public/products", { cache: "no-store" }),
+        fetch("/api/public/categories", { cache: "no-store" }),
       ]);
-      if (prodRes.ok) {
-        const data = await prodRes.json();
-        if (Array.isArray(data) && data.length > 0) {
-          currentProducts = data;
-        }
-      }
-      if (catRes.ok) {
-        const cats = await catRes.json();
-        if (Array.isArray(cats) && cats.length > 0) {
-          currentCategories = cats;
-        }
-      }
+      if (!prodRes.ok || !catRes.ok) return;
+      const [data, cats] = await Promise.all([prodRes.json(), catRes.json()]);
+      if (!Array.isArray(data) || !Array.isArray(cats)) return;
+      currentProducts = data;
+      currentCategories = cats;
       render();
     } catch {
       // Backend not running or static GitHub Pages mode; static PRODUCTS baseline remains active
@@ -180,4 +173,3 @@ if (grid) {
 
   syncFromBackend();
 }
-

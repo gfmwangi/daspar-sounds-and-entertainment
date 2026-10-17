@@ -3,30 +3,38 @@ import { db } from "./db/database.js";
 import { createApp } from "./app.js";
 
 async function startServer() {
-  try {
-    console.log("--------------------------------------------------");
-    console.log("  DASPAR Sounds & Entertainment — Backend Server   ");
-    console.log("--------------------------------------------------");
+  await db.init();
+  const [stats, categories] = await Promise.all([db.getStats(), db.getCategories()]);
+  const app = createApp();
+  const server = await new Promise((resolve, reject) => {
+    const instance = app.listen(config.port, config.host, () => resolve(instance));
+    instance.once("error", reject);
+  });
+  server.requestTimeout = 30_000;
+  server.headersTimeout = 35_000;
+  server.keepAliveTimeout = 5_000;
 
-    // Initialize and auto-seed persistent database
-    await db.init();
-    const stats = db.getStats();
-    console.log(`[Database] Initialized with ${stats.totalProducts} products across ${db.getCategories().length} categories.`);
-    console.log(`[Database] Image assets tracked: ${stats.totalPhotos}`);
+  console.log(`[Server] DASPAR API listening on ${config.host}:${config.port} (${config.nodeEnv}).`);
+  console.log(`[Database] PostgreSQL ready; ${stats.totalProducts} catalogue items across ${categories.length} categories.`);
+  console.log("[Admin] No default account is created. The owner must complete the single-use first-owner setup flow.");
 
-    const app = createApp();
-
-    app.listen(config.port, "0.0.0.0", () => {
-      console.log(`[Server] Listening at http://localhost:${config.port}`);
-      console.log(`[API] Health check: http://localhost:${config.port}/api/health`);
-      console.log(`[API] Public products: http://localhost:${config.port}/api/public/products`);
-      console.log(`[Admin] Initial administrator account: ${config.adminEmail}`);
-      console.log("--------------------------------------------------");
+  let shuttingDown = false;
+  const shutdown = (signal) => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    console.log(`[Server] ${signal} received; closing gracefully.`);
+    server.close(async () => {
+      await db.close().catch(() => {});
+      process.exit(0);
     });
-  } catch (error) {
-    console.error("[Fatal Error] Failed to start server:", error);
-    process.exit(1);
-  }
+    setTimeout(() => process.exit(1), 10_000).unref();
+  };
+  process.once("SIGTERM", () => shutdown("SIGTERM"));
+  process.once("SIGINT", () => shutdown("SIGINT"));
 }
 
-startServer();
+startServer().catch(async (error) => {
+  console.error(`[Fatal] Backend startup failed: ${error.name || "Error"}. Verify the private runtime configuration and database, then retry.`);
+  await db.close().catch(() => {});
+  process.exitCode = 1;
+});

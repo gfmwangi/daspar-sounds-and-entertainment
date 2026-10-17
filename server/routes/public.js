@@ -1,90 +1,79 @@
 import express from "express";
+import { Resend } from "resend";
 import { db } from "../db/database.js";
+import { config } from "../config.js";
 import { contactLimiter } from "../middleware/rateLimiter.js";
+import { requireTrustedOrigin } from "../security/session.js";
 
 const router = express.Router();
 
-/**
- * GET /api/public/products
- * Fetch products list with optional category filter and search query.
- */
-router.get("/products", (req, res) => {
+router.get("/products", async (req, res) => {
+  const category = typeof req.query.category === "string" ? req.query.category.slice(0, 80) : undefined;
+  const q = typeof req.query.q === "string" ? req.query.q.slice(0, 100) : undefined;
   try {
-    const { category, q } = req.query;
-    const products = db.getProducts({ category, q });
-    res.json(products);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve products", details: error.message });
+    return res.json(await db.getProducts({ category, q }));
+  } catch {
+    return res.status(503).json({ error: "The product catalogue is temporarily unavailable." });
   }
 });
 
-/**
- * GET /api/public/products/:id
- * Fetch a single product by its unique identifier.
- */
-router.get("/products/:id", (req, res) => {
+router.get("/products/:id", async (req, res) => {
   try {
-    const product = db.getProductById(req.params.id);
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
-    }
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve product", details: error.message });
+    const product = await db.getProductById(req.params.id);
+    return product ? res.json(product) : res.status(404).json({ error: "Product not found." });
+  } catch {
+    return res.status(503).json({ error: "Product details are temporarily unavailable." });
   }
 });
 
-/**
- * GET /api/public/categories
- * Fetch the confirmed product categories list.
- */
-router.get("/categories", (req, res) => {
+router.get("/categories", async (req, res) => {
   try {
-    const categories = db.getCategories();
-    res.json(categories);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve categories", details: error.message });
+    return res.json(await db.getCategories());
+  } catch {
+    return res.status(503).json({ error: "Product categories are temporarily unavailable." });
   }
 });
 
-/**
- * POST /api/contact-inquiries
- * Submit a customer inquiry with server-side validation and rate limiting.
- */
-router.post("/contact-inquiries", contactLimiter, async (req, res) => {
+router.post("/contact-inquiries", requireTrustedOrigin, contactLimiter, async (req, res) => {
+  const { name, email, subject, message } = req.body || {};
+  const clean = {
+    name: typeof name === "string" ? name.trim() : "",
+    email: typeof email === "string" ? email.trim() : "",
+    subject: typeof subject === "string" ? subject.trim() : "",
+    message: typeof message === "string" ? message.trim() : "",
+  };
+  if (!clean.name || clean.name.length > 120) return res.status(400).json({ error: "Enter a name of 1 to 120 characters." });
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean.email) || clean.email.length > 254) return res.status(400).json({ error: "Enter a valid email address." });
+  if (!clean.subject || clean.subject.length > 160) return res.status(400).json({ error: "Enter a subject of 1 to 160 characters." });
+  if (!clean.message || clean.message.length > 10_000) return res.status(400).json({ error: "Enter a message of 1 to 10,000 characters." });
+
   try {
-    const { name, email, subject, message } = req.body || {};
-
-    if (!name || typeof name !== "string" || !name.trim()) {
-      return res.status(400).json({ error: "Full name is required." });
+    const inquiry = await db.addContactInquiry(clean);
+    const emailConfigured = Boolean(config.resendApiKey && config.emailFrom && config.contactRecipientEmail);
+    let notificationAccepted = false;
+    if (emailConfigured) {
+      try {
+        const resend = new Resend(config.resendApiKey);
+        const { error } = await resend.emails.send({
+          from: config.emailFrom,
+          to: [config.contactRecipientEmail],
+          replyTo: clean.email,
+          subject: `Website inquiry: ${clean.subject}`,
+          text: `Name: ${clean.name}\nEmail: ${clean.email}\nSubject: ${clean.subject}\n\n${clean.message}`,
+        });
+        notificationAccepted = !error;
+      } catch {
+        notificationAccepted = false;
+      }
     }
-
-    if (!email || typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      return res.status(400).json({ error: "A valid email address is required." });
-    }
-
-    if (!subject || typeof subject !== "string" || !subject.trim()) {
-      return res.status(400).json({ error: "Subject is required." });
-    }
-
-    if (!message || typeof message !== "string" || !message.trim()) {
-      return res.status(400).json({ error: "Message content is required." });
-    }
-
-    const saved = await db.addContactInquiry({
-      name: name.trim(),
-      email: email.trim(),
-      subject: subject.trim(),
-      message: message.trim(),
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Thank you for contacting DASPAR Sounds & Entertainment. Your inquiry has been received.",
-      inquiryId: saved.id,
-    });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to submit inquiry", details: error.message });
+    const responseMessage = notificationAccepted
+      ? "Thank you. Your inquiry was saved. DASPAR's email service accepted a notification request; delivery to the inbox is not confirmed."
+      : emailConfigured
+        ? "Thank you. Your inquiry was saved, but the email service did not confirm its notification request. For an urgent response, please contact us by WhatsApp or phone."
+        : "Thank you. Your inquiry was saved, but no email was sent to DASPAR. For an urgent response, please contact us by WhatsApp or phone.";
+    return res.status(201).json({ success: true, message: responseMessage, inquiryId: inquiry.id, emailNotificationAccepted: notificationAccepted });
+  } catch {
+    return res.status(503).json({ error: "Your inquiry could not be saved. Please contact DASPAR by WhatsApp or phone instead." });
   }
 });
 

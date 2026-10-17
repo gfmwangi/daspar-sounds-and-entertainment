@@ -6,21 +6,10 @@
     <link rel="icon" type="image/png" sizes="256x256" href="%BASE_URL%assets/logo/favicon.png">
     <link rel="icon" type="image/x-icon" href="%BASE_URL%assets/logo/favicon.ico">
     <meta name="robots" content="noindex,nofollow">
-    <meta name="description" content="Visual admin sign-in preview for DASPAR Sounds and Entertainment; secure authentication is not implemented.">
-    <title>Admin Sign-in Preview | DASPAR</title>
+    <meta name="description" content="Administrator sign-in for DASPAR Sounds and Entertainment.">
+    <title>Admin Sign-in | DASPAR Sounds &amp; Entertainment</title>
     <link rel="stylesheet" href="/src/styles.css">
     <script type="module" src="/src/admin.js"></script>
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Daspar Sounds and Entertainment">
-    <meta property="og:title" content="Admin Sign-in Preview | Daspar Sounds and Entertainment">
-    <meta property="og:description" content="DASPAR Sounds &amp; Entertainment supplies quality, affordable electronics and public address (PA) systems, with countrywide delivery across Kenya. Services include PA systems, sound engineering, installation and maintenance, CCTV installation, speaker repairs, electrical and electronics maintenance, and electrical engineering.">
-    <meta property="og:url" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/admin/login.html">
-    <meta property="og:image" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/assets/logo/logo-1.jpeg">
-    <meta property="og:image:alt" content="DASPAR Sounds &amp; Entertainment logo">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Admin Sign-in Preview | Daspar Sounds and Entertainment">
-    <meta name="twitter:description" content="DASPAR Sounds &amp; Entertainment supplies quality, affordable electronics and public address (PA) systems, with countrywide delivery across Kenya. Services include PA systems, sound engineering, installation and maintenance, CCTV installation, speaker repairs, electrical and electronics maintenance, and electrical engineering.">
-    <meta name="twitter:image" content="https://gfmwangi.github.io/daspar-sounds-and-entertainment/assets/logo/logo-1.jpeg">
   </head>
   <body class="admin-body">
     <main class="admin-login-layout">
@@ -39,17 +28,18 @@
       <section class="admin-login-panel" aria-labelledby="admin-login-title">
         <div class="admin-login-card">
           <a class="admin-back-link" href="%BASE_URL%">← Back to website</a>
-          <p class="eyebrow">ADMIN ACCESS PREVIEW</p>
-          <h2 id="admin-login-title">Admin sign-in preview</h2>
-          <p class="admin-muted">This screen is for design review only. It does not sign users in or protect the dashboard.</p>
-          <aside class="prototype-warning" role="note" aria-label="Preview mode notice"><span class="prototype-warning__icon" aria-hidden="true">!</span><p><strong>Preview Mode — Not for Real Business Use.</strong> Secure authentication has not been implemented, and product changes may not be saved permanently. Do not enter real passwords or sensitive information.</p></aside>
-          <form id="admin-login-form" autocomplete="off" novalidate>
-            <div class="form-field"><label for="admin-email">Email address</label><input id="admin-email" name="email" type="email" autocomplete="off" placeholder="name@example.com" aria-describedby="admin-login-message"></div>
-            <div class="form-field"><label for="admin-password">Password</label><input id="admin-password" name="password" type="password" autocomplete="off" placeholder="Enter password" aria-describedby="admin-login-message"></div>
-            <button class="button button--primary button--full" type="submit">Sign in to Dashboard <span aria-hidden="true">→</span></button>
+          <p class="eyebrow">ADMINISTRATION</p>
+          <h2 id="admin-login-title">Admin sign-in</h2>
+          <p class="admin-muted">Sign in with the administrator account provided by the business owner.</p>
+          <p class="admin-runtime-note" id="admin-login-runtime-note" role="status" aria-live="polite">Checking sign-in service…</p>
+          <form id="admin-login-form" autocomplete="on" novalidate>
+            <div class="form-field"><label for="admin-email">Email address</label><input id="admin-email" name="email" type="email" autocomplete="username" required disabled placeholder="name@example.com" aria-describedby="admin-login-message"></div>
+            <div class="form-field"><label for="admin-password">Password</label><input id="admin-password" name="password" type="password" autocomplete="current-password" required disabled placeholder="Enter password" aria-describedby="admin-login-message"></div>
+            <button class="button button--primary button--full" type="submit" disabled>Sign in to Dashboard <span aria-hidden="true">→</span></button>
             <p class="form-status" id="admin-login-message" role="status" aria-live="polite"></p>
           </form>
-          <div class="admin-demo-link"><span>ADMINISTRATION</span><a href="%BASE_URL%admin/dashboard.html">Open admin dashboard ↗</a></div>
+          <p class="admin-recovery-link"><a href="%BASE_URL%admin/forgot-password.html">Forgot password?</a></p>
+          <p class="admin-recovery-link" id="admin-setup-link-container" hidden><a href="%BASE_URL%admin/setup.html">Set up the administrator account</a></p>
         </div>
       </section>
     </main>
